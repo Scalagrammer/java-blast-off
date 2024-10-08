@@ -2,6 +2,13 @@ package scg.blastoff.collections;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -18,14 +25,15 @@ public class Main {
 
 // Collection<T> implements Iterable<T>
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
+        showJFrame();
 //        lists();
 //        sets();
 //        stack();
 //        maps();
     }
 
-    private static void showJFrame() throws IOException {
+    private static void showJFrame() throws IOException, URISyntaxException {
         JFrame dictionary = new JFrame("Dictionary");
 
         dictionary.setBounds(0, 0, 500, 500);
@@ -36,7 +44,7 @@ public class Main {
 
         dictionary.setLayout(borderLayout);
 
-        ImageIcon imageIcon = new ImageIcon(Files.readAllBytes(Paths.get("//icons/img.png")));
+        ImageIcon imageIcon = new ImageIcon(Files.readAllBytes(Paths.get(Main.class.getClassLoader().getResource("icons/img.png").toURI())));
 
         JButton jButton = new JButton(imageIcon);
 
@@ -45,11 +53,19 @@ public class Main {
         dictionary.getContentPane()
                 .add(jButton, BorderLayout.CENTER);
 
-        jButton.addActionListener(e -> {
-            System.out.println("CLICK!");
+        jButton.addActionListener(e -> System.out.println("CLICK!"));
+
+        jButton.addMouseWheelListener(e -> System.out.println("SCROLL!"));
+
+        jButton.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                System.out.println("IN FOCUS!");
+            }
         });
 
         dictionary.toFront();
+
     }
 
 //   persons
